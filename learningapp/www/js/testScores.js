@@ -17,7 +17,7 @@ async function fetchTestScores(subject) {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/tests?subject=${subject}`, {
+    const res = await fetch(`http://172.20.10.3:3000/tests?subject=${subject}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) {

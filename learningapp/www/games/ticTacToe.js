@@ -106,7 +106,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // your user decode
     if (!userId) return;
   
-    fetch(`http://localhost:3000/users/${userId}/xp`, {
+    fetch(`http://172.20.10.3:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -224,7 +224,7 @@ class TicTacToeGame {
                 this.xScore++;
                 document.getElementById('x-score').textContent = this.xScore;
                 this.displayMessage('You win!', 'success');
-
+                updateXP(50);   
                 // 1) CALL OUR NEW FUNCTION to record the win on server
                 this.recordWinOnServer();
 
@@ -298,7 +298,6 @@ class TicTacToeGame {
 
             this.currentPlayer = this.humanPlayer;
             document.getElementById('current-player').textContent = 'Your Turn (X)';
-            updateXP(30); 
 
         }, 500);
     }
@@ -358,7 +357,7 @@ class TicTacToeGame {
           return;
         }
 
-        fetch("http://localhost:3000/tictactoe/win", {
+        fetch("http://172.20.10.3:3000/tictactoe/win", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

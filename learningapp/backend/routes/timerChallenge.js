@@ -37,6 +37,7 @@ router.post("/time", authMiddleware, async (req, res) => {
 
     // If you want to store the BEST (longest) time:
     user.timerChallengeTime = Math.max(user.timerChallengeTime, finalTime);
+    user.coins += 25;
 
     // If you prefer storing the LATEST time:
     // user.timerChallengeTime = finalTime;
@@ -45,7 +46,9 @@ router.post("/time", authMiddleware, async (req, res) => {
 
     return res.status(200).json({
       message: "Timer challenge time updated",
-      timerChallengeTime: user.timerChallengeTime
+      timerChallengeTime: user.timerChallengeTime,
+      coins: user.coins, // Return coins as well
+
     });
   } catch (err) {
     console.error("Error updating timer challenge time:", err);

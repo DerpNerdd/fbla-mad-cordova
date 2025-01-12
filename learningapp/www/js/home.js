@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Example fetch user data
   async function fetchUserData(userId) {
     const token = localStorage.getItem("authToken");
-    const res = await fetch(`http://localhost:3000/users/${userId}`, {
+    const res = await fetch(`http://172.20.10.3:3000/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
   
-    const res = await fetch(`http://localhost:3000/users/${userId}/xp`, {
+    const res = await fetch(`http://172.20.10.3:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

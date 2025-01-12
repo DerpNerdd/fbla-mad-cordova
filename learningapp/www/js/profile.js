@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /** Calls GET /users/:id to retrieve user data (xp, level, pictures, etc.) */
   async function fetchUserData(userId) {
     const token = localStorage.getItem("authToken");
-    const res = await fetch(`http://localhost:3000/users/${userId}`, {
+    const res = await fetch(`http://172.20.10.3:3000/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Upload to your backend, which then uses Cloudinary
     // e.g. POST /users/:id/uploadProfile or /users/:id/uploadBanner
-    const url = `http://localhost:3000/users/${userId}/${endpoint}`;
+    const url = `http://172.20.10.3:3000/users/${userId}/${endpoint}`;
     const res = await fetch(url, {
       method: "POST",
       headers: {

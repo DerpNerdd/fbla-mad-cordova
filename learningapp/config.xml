@@ -9,6 +9,12 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
 
+    <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="*" />
+    <preference name="scheme" value="http" />
+    <preference name="hostname" value="localhost" />
+
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -22,7 +28,6 @@
 
     <!-- Prevent Cropping -->
     <preference name="SplashMaintainAspectRatio" value="false" />
-
     <!-- Splash Screen Duration -->
     <preference name="SplashScreenDelay" value="3000" />
 

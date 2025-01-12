@@ -36,13 +36,16 @@ router.post("/score", authMiddleware, async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-  
+      user.coins += 25;
+
       user.jeopardyScore = Math.max(user.jeopardyScore, finalScore); // or user.jeopardyScore = finalScore
       await user.save();
   
       return res.status(200).json({
         message: "Jeopardy score updated",
         jeopardyScore: user.jeopardyScore,
+        coins: user.coins, // Return coins as well
+
       });
     } catch (err) {
       console.error("Error updating Jeopardy score:", err);

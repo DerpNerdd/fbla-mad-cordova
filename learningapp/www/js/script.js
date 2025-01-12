@@ -39,49 +39,41 @@ document.addEventListener("DOMContentLoaded", () => {
 window.auth = async function () {
   console.log("Auth function called");
 
-  // Determine whether user is logging in or signing up
-  const isLogin = document.querySelector('.login.magic'); 
-  // If the login button is highlighted, user is logging in;
-  // otherwise they're signing up.
-
+  const isLogin = document.querySelector('.login.magic');
   let email, password, name;
-  
+
   if (isLogin) {
-    // Grabbing login fields
     email = document.getElementById("login-email").value;
     password = document.getElementById("login-password").value;
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('http://172.20.10.3:3000/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      
+
       const data = await response.json();
+
       if (response.ok) {
-        // Successful login
         console.log(data.message);
-        // Store token if needed
         localStorage.setItem('authToken', data.token);
-        // Then redirect
         window.location.assign("homepage.html");
       } else {
+        console.error("Login failed:", data);
         alert(data.message || "Login failed");
       }
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Error during login:", err);
+      alert("Something went wrong: " + err.message);
     }
-
   } else {
-    // Grabbing signup fields
     const signupEmail = document.getElementById("signup-email").value;
     const signupPassword = document.getElementById("signup-password").value;
     const nameInput = document.querySelector('.signup-box input[type="text"]').value;
-    
+
     try {
-      const response = await fetch('http://localhost:3000/auth/signup', {
+      const response = await fetch('http://172.20.10.3:3000/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -90,19 +82,19 @@ window.auth = async function () {
           password: signupPassword
         })
       });
-      
+
       const data = await response.json();
+
       if (response.ok) {
-        // Successful sign-up
         alert(data.message);
-        // Possibly switch to login view after sign-up
         window.location.assign("homepage.html");
       } else {
+        console.error("Signup failed:", data);
         alert(data.message || "Signup failed");
       }
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Error during signup:", err);
+      alert("Something went wrong: " + err.message);
     }
   }
 };

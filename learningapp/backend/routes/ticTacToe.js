@@ -29,11 +29,15 @@ router.post("/win", authMiddleware, async (req, res) => {
     }
 
     user.ticTacToeWins += 1;
+    user.coins += 5;
+
     await user.save();
 
     return res.status(200).json({
       message: "Tic Tac Toe win recorded",
       ticTacToeWins: user.ticTacToeWins,
+      coins: user.coins, // Return coins as well
+
     });
   } catch (err) {
     console.error(err);
