@@ -74,10 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
     sideInfo1.textContent = user.jeopardyScore || 0;
   
     // 2) Timer Challenge Time
-    sideInfo2.textContent = user.timerChallengeTime || "00:00";
+    sideInfo2.textContent = `${user.timerChallengeTime}s` || "00:00";
   
     // 3) Coins
-    sideInfo3.textContent = user.coins || 0;
+    sideInfo3.textContent = `$ ${user.coins}` || 0;
   
     // 4) TicTacToeWins
     sideInfo4.textContent = user.ticTacToeWins || 0;

@@ -119,10 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const levelRect = document.getElementById("level-rectangle");
     levelRect.textContent = `Level ${level}`;
 
-    document.getElementById("timerValue").textContent      = user.timerChallengeTime || "00:00";
+    document.getElementById("timerValue").textContent      = `${user.timerChallengeTime}s` || "00:00";
     document.getElementById("jeopardyValue").textContent   = user.jeopardyScore      || 0;
     document.getElementById("ticTacToeValue").textContent  = user.ticTacToeWins      || 0;
-    document.getElementById("coinsValue").textContent      = user.coins              || 0;
+    document.getElementById("coinsValue").textContent      = `$ ${user.coins}`              || 0;
   }
   
   /** Converts a <input type="file"> file to base64, calls the relevant upload endpoint. */

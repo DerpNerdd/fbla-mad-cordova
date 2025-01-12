@@ -8,6 +8,12 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
+const ticTacToeRoutes = require("./routes/ticTacToe");
+const jeopardyRoutes = require("./routes/jeopardy"); 
+const timerChallengeRoutes = require("./routes/timerChallenge"); 
+const testRoutes = require("./routes/test");
+
+
 app.use(cors());
 app.use(express.json());
 
@@ -17,6 +23,11 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes); 
+app.use("/tictactoe", ticTacToeRoutes);
+app.use("/jeopardy", jeopardyRoutes);
+app.use("/timerChallenge", timerChallengeRoutes);
+app.use("/tests", testRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Hello from the backend!");

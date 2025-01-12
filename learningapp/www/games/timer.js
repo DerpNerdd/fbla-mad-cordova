@@ -105,6 +105,39 @@ let timeTrack;
 let bestTime = 0;
 let currentQuestion;
 
+function getUserIdFromToken() {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.userId; 
+    } catch (e) {
+      console.error("Invalid token parse:", e);
+      return null;
+    }
+  }
+
+function updateXP(amount) {
+    const token = localStorage.getItem("authToken");
+    const userId = getUserIdFromToken(); // decode user ID from token
+    if (!userId) return;
+  
+    fetch(`http://localhost:3000/users/${userId}/xp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ xpChange: amount }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("XP updated:", data);
+      })
+      .catch((err) => console.error("Failed to update XP", err));
+  }
+  
+
 function startGame() {
     timeLeft = 30;
     timeTrack = 0;
@@ -137,14 +170,48 @@ function updateTimer() {
 
 function endGame() {
     clearInterval(timer);
-    const finalTime = 30 + timeTrack;
+    const finalTime = parseFloat(30 + timeTrack);
     if (finalTime > bestTime) {
-        bestTime = finalTime;
-        document.querySelector('.score').textContent = `Best Time: ${bestTime} seconds`;
+      bestTime = finalTime;
+      document.querySelector('.score').textContent = `Best Time: ${bestTime} seconds`;
     }
     document.querySelector('.game-over').style.display = 'block';
     document.querySelector('.question-container').style.display = 'none';
     document.querySelector('.final-time').textContent = finalTime;
+  
+    // Save final time
+    recordTimerTimeOnServer(finalTime);
+  
+    // Award +30 XP for completing Timer Challenge
+    updateXP(30);
+  }
+  
+
+// 2) new function to POST finalTime to the server
+function recordTimerTimeOnServer(finalTime) {
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("No auth token found");
+    return;
+  }
+
+  // Post to /timerChallenge/time
+  fetch("http://localhost:3000/timerChallenge/time", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ finalTime }) // must match the route's expected key
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Timer challenge time recorded:", data);
+    // data.timerChallengeTime is the updated time in the DB
+  })
+  .catch(err => {
+    console.error("Error recording timer challenge time:", err);
+  });
 }
 
 function askQuestion() {

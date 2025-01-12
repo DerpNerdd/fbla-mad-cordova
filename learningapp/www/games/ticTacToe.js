@@ -89,6 +89,38 @@ const QUESTIONS = [
     { category: 'Math', question: 'What is the value of 7 x 7?', options: ['49', '50', '51', '48'], correctAnswer: '49' }
 ];
 
+function getUserIdFromToken() {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.userId; 
+    } catch (e) {
+      console.error("Invalid token parse:", e);
+      return null;
+    }
+  }
+
+function updateXP(amount) {
+    const token = localStorage.getItem("authToken");
+    const userId = getUserIdFromToken(); // your user decode
+    if (!userId) return;
+  
+    fetch(`http://localhost:3000/users/${userId}/xp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ xpChange: amount }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("XP updated:", data);
+      })
+      .catch((err) => console.error("Failed to update XP", err));
+  }
+  
 
 class TicTacToeGame {
     constructor() {
@@ -138,7 +170,6 @@ class TicTacToeGame {
         if (this.currentPlayer !== this.humanPlayer) return;
 
         const index = cell.getAttribute('data-index');
-
         // Check if cell is already occupied
         if (this.board[index] !== '') return;
 
@@ -186,7 +217,6 @@ class TicTacToeGame {
 
             // Close modal
             modal.style.display = 'none';
-
             this.displayMessage('Correct! Nice Job.', 'success');
 
             // Check for win or draw
@@ -194,6 +224,10 @@ class TicTacToeGame {
                 this.xScore++;
                 document.getElementById('x-score').textContent = this.xScore;
                 this.displayMessage('You win!', 'success');
+
+                // 1) CALL OUR NEW FUNCTION to record the win on server
+                this.recordWinOnServer();
+
                 return;
             } else if (this.board.every(cell => cell !== '')) {
                 this.displayMessage('Draw!', 'info');
@@ -213,7 +247,6 @@ class TicTacToeGame {
 
             // Close modal
             modal.style.display = 'none';
-
             // Display incorrect answer message
             this.displayMessage('Wrong answer! Skipping your turn.', 'error');
 
@@ -223,15 +256,9 @@ class TicTacToeGame {
     }
 
     computerMove() {
-        // Prevent further human interaction during computer's turn
+        // Prevent further human interaction
         this.currentPlayer = this.computerPlayer;
         document.getElementById('current-player').textContent = 'Computer\'s Turn (O)';
-
-        // Simple AI strategy: 
-        // 1. Try to win
-        // 2. Block human's winning move
-        // 3. Take center if available
-        // 4. Take a random empty cell
 
         const winningMove = this.findWinningMove(this.computerPlayer);
         const blockingMove = this.findWinningMove(this.humanPlayer);
@@ -253,14 +280,11 @@ class TicTacToeGame {
             moveIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         }
 
-        // Simulate a short delay to make computer move feel more natural
         setTimeout(() => {
-            // Place the computer's symbol
             const cells = document.querySelectorAll('.board-cell');
             this.board[moveIndex] = this.computerPlayer;
             cells[moveIndex].textContent = this.computerPlayer;
 
-            // Check for win or draw
             if (this.checkWin()) {
                 this.oScore++;
                 document.getElementById('o-score').textContent = this.oScore;
@@ -268,44 +292,34 @@ class TicTacToeGame {
                 return;
             } else if (this.board.every(cell => cell !== '')) {
                 this.displayMessage('Draw!', 'info');
+                updateXP(10);   
                 return;
             }
 
-            // Switch back to human player
             this.currentPlayer = this.humanPlayer;
             document.getElementById('current-player').textContent = 'Your Turn (X)';
+            updateXP(30); 
+
         }, 500);
     }
 
     findWinningMove(player) {
         const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  // Columns
-            [0, 4, 8], [2, 4, 6]  // Diagonals
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
         ];
 
         for (let pattern of winPatterns) {
             const [a, b, c] = pattern;
             // Check if two cells are filled by the same player and third is empty
-            if (
-                this.board[a] === player && 
-                this.board[b] === player && 
-                this.board[c] === ''
-            ) {
+            if (this.board[a] === player && this.board[b] === player && this.board[c] === '') {
                 return c;
             }
-            if (
-                this.board[a] === player && 
-                this.board[c] === player && 
-                this.board[b] === ''
-            ) {
+            if (this.board[a] === player && this.board[c] === player && this.board[b] === '') {
                 return b;
             }
-            if (
-                this.board[b] === player && 
-                this.board[c] === player && 
-                this.board[a] === ''
-            ) {
+            if (this.board[b] === player && this.board[c] === player && this.board[a] === '') {
                 return a;
             }
         }
@@ -314,16 +328,16 @@ class TicTacToeGame {
 
     checkWin() {
         const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  // Columns
-            [0, 4, 8], [2, 4, 6]  // Diagonals
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
         ];
 
         return winPatterns.some(pattern => {
             const [a, b, c] = pattern;
-            return this.board[a] && 
-                this.board[a] === this.board[b] && 
-                this.board[a] === this.board[c];
+            return this.board[a] &&
+                   this.board[a] === this.board[b] &&
+                   this.board[a] === this.board[c];
         });
     }
 
@@ -335,10 +349,34 @@ class TicTacToeGame {
         this.currentPlayer = this.humanPlayer;
         document.getElementById('current-player').textContent = 'Your Turn (X)';
     }
+
+    // 2) Function to record the TTT win on server
+    recordWinOnServer() {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No auth token found");
+          return;
+        }
+
+        fetch("http://localhost:3000/tictactoe/win", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Win recorded on server:", data);
+          // Optionally, call a function to update the home page's TTT score
+          // (if user returns there next).
+        })
+        .catch(err => {
+          console.error("Error recording Tic Tac Toe win:", err);
+        });
+    }
 }
 
-// Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new TicTacToeGame();
-
 });

@@ -46,9 +46,16 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
   timerChallengeTime: {
-    type: String,
-    default: "00:00"
-  }
+    type: Number,
+    default: 0
+  },
+  testScores: [
+    {
+      subject: { type: String, required: true },
+      date: { type: Date, required: true },
+      score: { type: Number, required: true }
+    }
+  ]
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -186,6 +186,15 @@ const endTest = () => {
 };
 
 const showScorePopup = () => {
+
+
+    const finalScore = score; // out of 25
+    const subjectName = category; // from URL param
+    const dateNow = new Date().toISOString(); // or any date format
+  
+    // 1) Save to server
+    recordTestScoreOnServer(subjectName, dateNow, finalScore);
+    
     // Create the overlay to darken the background
     const overlay = document.createElement('div');
     overlay.id = 'overlay';
@@ -214,6 +223,29 @@ const showScorePopup = () => {
     popup.style.display = 'block';
 };
 
+function recordTestScoreOnServer(subject, date, score) {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
+  
+    fetch("http://localhost:3000/tests/score", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ subject, date, score })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Test score saved:", data);
+      })
+      .catch(err => {
+        console.error("Error saving test score:", err);
+      });
+  }
 
 nextButton.onclick = handleNext;
 

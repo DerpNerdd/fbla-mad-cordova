@@ -155,6 +155,39 @@ let answeredQuestions = new Set();
 let currentQuestion = null;
 let gameQuestions = {}; // Will store the randomly selected questions for the current game
 
+function getUserIdFromToken() {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.userId; 
+    } catch (e) {
+      console.error("Invalid token parse:", e);
+      return null;
+    }
+  }
+
+function updateXP(amount) {
+    const token = localStorage.getItem("authToken");
+    const userId = getUserIdFromToken(); // decode user ID from token
+    if (!userId) return;
+  
+    fetch(`http://localhost:3000/users/${userId}/xp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ xpChange: amount }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("XP updated:", data);
+      })
+      .catch((err) => console.error("Failed to update XP", err));
+  }
+  
+
 function getRandomQuestion(category, points) {
 const questions = questionPool[category][points];
 return questions[Math.floor(Math.random() * questions.length)];
@@ -273,6 +306,48 @@ if (button) {
     document.getElementById('gameOver').style.display = 'block';
     document.getElementById('finalScore').textContent = score;
     }
+
+    function recordJeopardyScoreOnServer(finalScore) {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No auth token found");
+          return;
+        }
+      
+        console.log("Posting finalScore =>", finalScore, typeof finalScore);
+
+        fetch("http://localhost:3000/jeopardy/score", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ finalScore })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Jeopardy score recorded on server:", data);
+          // data.jeopardyScore is the new or updated score in the database
+        })
+        .catch(err => {
+          console.error("Error recording Jeopardy score:", err);
+        });
+      }
+      
+      
+      function endGame() {
+        document.getElementById('questionScreen').style.display = 'none';
+        document.getElementById('gameBoard').style.display = 'none';
+        document.getElementById('gameOver').style.display = 'block';
+        document.getElementById('finalScore').textContent = score;
+      
+        // Save final Jeopardy score
+        recordJeopardyScoreOnServer(score);
+      
+        // Add +30 XP for finishing Jeopardy
+        updateXP(30);
+      }
+      
 
     function resetGame() {
     score = 0;
