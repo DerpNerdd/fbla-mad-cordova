@@ -221,12 +221,15 @@ body {
 }
 
 circle {
-    fill:none;
+    fill: none;
     stroke: url(#GradientColor);
     stroke-width: 20px;
+    /* We keep a default dasharray and offset at full (510 for a 70 radius), 
+       but no forced animation. */
     stroke-dasharray: 510;
     stroke-dashoffset: 510;
-    animation: anim 2s linear forwards;
+    /* Optionally add a smooth transition so it animates from old offset to new offset: */
+    transition: stroke-dashoffset 0.5s ease-out;
 }
 
 svg{
@@ -237,11 +240,6 @@ svg{
     z-index: 40;
 }
 
-@keyframes anim {
-    100%{
-        stroke-dashoffset: 165.5;
-    }
-}
 
 .level {
     width: 90px;
