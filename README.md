@@ -14,16 +14,8 @@ interactive design, and user feedback mechanisms.
 - [Features](#features)
 - [Documentation Used](#documentation)
 - [Installation and Setup](#installation-and-setup)
-    - [Prerequisites](#prerequisites)
-    - [Clone the Repository](#clone-the-repository)
-    - [Install Dependencies](#install-depencencies)
-    - [Enviornment Variables](#enviornment-variables)
 - [Running the Project](#running-the-project)
 - [Routes and API Endpoints](#routes-and-api-endpoints)
-  - [User Authentication Routes](#user-authentication-routes)
-  - [User Routes](#pet-routes)
-  - [Game Routes](#contact-routes)
-  - [Auth Routes](#admin-routes)
 - [Project Structure](#project-structure)
 - [License](#license)
 - [Authors](#Authors)
@@ -68,7 +60,13 @@ interactive design, and user feedback mechanisms.
 ---
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+- [Cordova Documentation](https://cordova.apache.org/docs/en/latest/)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [MongoDB Documentation](https://www.mongodb.com/docs/)
+- [BCrypt Documentation](https://www.npmjs.com/package/bcrypt)
+- [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html)
+- [Java JDK Documentation](https://docs.oracle.com/javase/8/docs/)
+- [GitHub Documentation](https://docs.github.com/en)
 
 - **Frontend:**
   - HTML5, CSS3, JavaScript
