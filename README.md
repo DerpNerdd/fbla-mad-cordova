@@ -228,22 +228,51 @@ Pet-Adoption/
     ├── contact.ejs
     ├── email-sent.ejs
     └── admin.ejs
-```## Key Files and Directories
+```
+## Key Files and Directories
 - app.js: The main application file where the Express app is configured.
-- routes/: Contains all route handlers for different parts of the application.
+- routes/: Contains all route handlers for different par0ts of the application.
 - controllers/: Contains controller functions that handle the logic for each route.
 - models/: Mongoose schemas and models for MongoDB collections.
 - views/: EJS templates for rendering HTML pages.
 - public/: Static assets like CSS, images, and fonts.
+
 ## License
+This project is licensed under the MIT License.
+
 ## Authors
+For any inquiries or support, please contact:
 
 - [Alan Sanchez](https://www.github.com/derpnerdd)
 - [Daniel Freeman](https://www.github.com/DanielFreeman068)
 
 
 ## Models
+**User Model (User.js)**
+Fields:
+
+- username (String)
+- email (String, unique)
+- password (String, hashed)
+- isAdmin (Boolean, default: false)
 ## Security Considerations
+- Password Security: User passwords are hashed using bcrypt before storing in the database.
+Authentication: Sessions are managed securely using Express sessions and Passport.js.
+- Input Validation: All user inputs should be validated and sanitized to prevent injection attacks.
+- Access Control: Middleware functions ensure that only authorized users can access certain routes.
 ## Known Issues and TODOs
+- Image Uploads: Currently supports JPEG, PNG, and WebP formats. Consider adding validation for file size and type.
+- Email Service: Configure nodemailer with a reliable email service. Handle errors gracefully.
+- Testing: Implement unit and integration tests for critical components.
+- Error Handling: Improve error handling and provide user-friendly error messages.
 ## Changelog
+v1.0.0
+- Initial release with core functionalities:
+- User authentication
+- Pet listing management
+- Contact pet owners
+- Admin dashboard
 ## Credits
+This project was developed with the aim of facilitating pet adoption and helping pets find loving homes.
+
+Thank you for contributing to the Pet Adoption Platform!
