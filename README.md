@@ -68,7 +68,13 @@ interactive design, and user feedback mechanisms.
 ---
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+- [Cordova Documentation](https://cordova.apache.org/docs/en/latest/)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [MongoDB Documentation](https://www.mongodb.com/docs/)
+- [BCrypt Documentation](https://www.npmjs.com/package/bcrypt)
+- [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html)
+- [Java JDK Documentation](https://docs.oracle.com/javase/8/docs/)
+- [GitHub Documentation](https://docs.github.com/en)
 
 - **Frontend:**
   - HTML5, CSS3, JavaScript
