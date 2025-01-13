@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Script loaded successfully");
 
@@ -47,13 +49,20 @@ window.auth = async function () {
     password = document.getElementById("login-password").value;
 
     try {
-      const response = await fetch('http://172.20.10.3:3000/auth/login', {
+      const response = await fetch(`http://${process.env.IP}:3000/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
+      // Log the response for debugging
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers]);
+
       const data = await response.json();
+
+      console.log('Response body:', data); // Log response
+
 
       if (response.ok) {
         console.log(data.message);
@@ -64,8 +73,16 @@ window.auth = async function () {
         alert(data.message || "Login failed");
       }
     } catch (err) {
+      // Log the specific error for debugging
       console.error("Error during login:", err);
-      alert("Something went wrong: " + err.message);
+
+      if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+        alert(
+          "Network error: Check your server's CORS settings or ensure the backend is reachable."
+        );
+      } else {
+        alert("Something went wrong: " + err.message);
+      }
     }
   } else {
     const signupEmail = document.getElementById("signup-email").value;
@@ -73,15 +90,18 @@ window.auth = async function () {
     const nameInput = document.querySelector('.signup-box input[type="text"]').value;
 
     try {
-      const response = await fetch('http://172.20.10.3:3000/auth/signup', {
+      const response = await fetch(`http://${process.env.IP}:3000/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: nameInput,
           email: signupEmail,
-          password: signupPassword
-        })
+          password: signupPassword,
+        }),
       });
+
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers]);
 
       const data = await response.json();
 
@@ -94,7 +114,14 @@ window.auth = async function () {
       }
     } catch (err) {
       console.error("Error during signup:", err);
-      alert("Something went wrong: " + err.message);
+
+      if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+        alert(
+          "Network error: Check your server's CORS settings or ensure the backend is reachable."
+        );
+      } else {
+        alert("Something went wrong: " + err.message);
+      }
     }
   }
 };

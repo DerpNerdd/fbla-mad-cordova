@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const questionPool = {
     math: [
         { question: "What is 8 × 7?", choices: ["58", "56", "64", "54"], correctAnswer: "56" },
@@ -230,7 +232,7 @@ function recordTestScoreOnServer(subject, date, score) {
       return;
     }
   
-    fetch("http://172.20.10.3:3000/tests/score", {
+    fetch(`http://${process.env.IP}:3000/tests/score`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

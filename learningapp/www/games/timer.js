@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const questions = {
     math: [
         { question: "What is 8 × 7?", options: ["58", "56", "64", "54"], correct: "56" },
@@ -122,7 +125,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // decode user ID from token
     if (!userId) return;
   
-    fetch(`http://172.20.10.3:3000/users/${userId}/xp`, {
+    fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -196,7 +199,7 @@ function recordTimerTimeOnServer(finalTime) {
   }
 
   // Post to /timerChallenge/time
-  fetch("http://172.20.10.3:3000/timerChallenge/time", {
+  fetch(`http://${process.env.IP}:3000/timerChallenge/time`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

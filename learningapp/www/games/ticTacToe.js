@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const QUESTIONS = [
     // Science Questions
     { category: 'Science', question: 'What is the chemical symbol for water?', options: ['CO2', 'H2O', 'O2', 'NaCl'], correctAnswer: 'H2O' },
@@ -106,7 +109,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // your user decode
     if (!userId) return;
   
-    fetch(`http://172.20.10.3:3000/users/${userId}/xp`, {
+    fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -357,7 +360,7 @@ class TicTacToeGame {
           return;
         }
 
-        fetch("http://172.20.10.3:3000/tictactoe/win", {
+        fetch(`http://${process.env.IP}:3000/tictactoe/win`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

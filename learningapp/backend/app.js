@@ -14,10 +14,17 @@ const timerChallengeRoutes = require("./routes/timerChallenge");
 const testRoutes = require("./routes/test");
 
 
-app.use(cors({
-    origin: '*', 
-  }));
-  app.use(express.json({ limit: "30mb" }));
+const corsOptions = {
+  origin: '*',  // or add "file://" or the relevant scheme used by Cordova WebView
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+
+app.use(express.json({ limit: "30mb" }));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))

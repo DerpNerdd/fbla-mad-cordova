@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const questionPool = {
     Math: {
     100: [
@@ -149,6 +151,7 @@ const questionPool = {
     }
 };
 
+
 let score = 0;
 let lives = 3;
 let answeredQuestions = new Set();
@@ -172,7 +175,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // decode user ID from token
     if (!userId) return;
   
-    fetch(`http://172.20.10.3:3000/users/${userId}/xp`, {
+    fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -316,7 +319,7 @@ if (button) {
       
         console.log("Posting finalScore =>", finalScore, typeof finalScore);
 
-        fetch("http://172.20.10.3:3000/jeopardy/score", {
+        fetch(`http://${process.env.IP}:3000/jeopardy/score`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
