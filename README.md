@@ -14,6 +14,10 @@ interactive design, and user feedback mechanisms.
 - [Features](#features)
 - [Documentation Used](#documentation)
 - [Installation and Setup](#installation-and-setup)
+    - [Prerequisites](#prerequisites)
+    - [Clone the Repository](#clone-the-repository)
+    - [Install Dependencies](#install-depencencies)
+    - [Enviornment Variables](#enviornment-variables)
 - [Running the Project](#running-the-project)
 - [Routes and API Endpoints](#routes-and-api-endpoints)
   - [User Authentication Routes](#user-authentication-routes)
@@ -66,9 +70,180 @@ interactive design, and user feedback mechanisms.
 
 [Documentation](https://linktodocumentation)
 
+- **Frontend:**
+  - HTML5, CSS3, JavaScript
+  - EJS (Embedded JavaScript Templates)
+  - Responsive design with media queries
 
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB with Mongoose ORM
+
+- **Authentication:**
+  - Passport.js for user authentication
+  - bcrypt for password hashing
+
+- **File Uploads:**
+  - Multer for handling multipart/form-data
+
+- **Email Communication:**
+  - Nodemailer for sending emails to pet owners
+
+- **Icons and Fonts:**
+  - Google Fonts for typography
+  - Ionicons for icons
+## Installation and setup
+
+### **Prerequisites**
+
+- Node.js (v12 or higher)
+- npm (Node Package Manager)
+- MongoDB (local instance or MongoDB Atlas)
+
+### **Clone the Repository**
+
+```bash
+git clone https://github.com/Derpnerdd/Pet-Adoption.git
+cd Pet-Adoption
+```
+### **Install Dependencies**
+```bash
+npm install
+```
+### **Environment Variables**
+Create a .env file in the root directory.
+
+## Running the project
+
+Start the Server
+```
+npm run start
+```
+The server will start on http://localhost:3000 or the port specified in your .env file.
+## Routes and API Endpoints
+**GET /login**
+- Description: Render the login page.
+- Access: Public
+- View: login.ejs
+**POST /api/v1/users/login**
+- Description: Authenticate user and start a session.
+- Access: Public
+- Data: email, password
+**GET /signup**
+- Description: Render the signup (registration) page.
+- Access: Public
+- View: signup.ejs
+**POST /api/v1/users/register**
+- Description: Register a new user.
+- Access: Public
+- Data: username, email, password
+**GET /logout**
+- Description: Log out the current user and destroy the session.
+- Access: Private (authenticated users)
+## Pet Routes
+**GET /**
+- Description: Display all available pets for adoption.
+- Access: Public
+- View: index.ejs
+**GET /pets/new**
+- Description: Render the form to create a new pet listing.
+- Access: Private (authenticated users)
+- View: create-pet.ejs
+**POST /pets**
+- Description: Create a new pet listing.
+- Access: Private (authenticated users)
+- Data: Pet details and images.
+**GET /pets/:id**
+- Description: Display detailed information about a specific pet.
+- Access: Public
+- View: pet-details.ejs
+**GET /pets/edit/:id**
+- Description: Render the form to edit a pet listing.
+- Access: Private (pet owner only)
+- View: edit-pet.ejs
+**POST /pets/edit/:id**
+- Description: Update the pet listing with new information.
+- Access: Private (pet owner only)
+- Data: Updated pet details and images.
+**POST /pets/delete/:id**
+- Description: Delete a pet listing.
+- Access: Private (pet owner or admin)
+## Contact Routes
+**GET /contact/:petId**
+- Description: Render the contact form to message the pet owner.
+- Access: Private (authenticated users)
+- View: contact.ejs
+**POST /contact/:petId**
+- Description: Send a message to the pet owner via email.
+- Access: Private (authenticated users)
+- Data: subject, message
+- Redirects to: email-sent.ejs confirmation page.
+## Admin Routes
+**GET /admin**
+- Description: Render the admin dashboard.
+- Access: Private (admin users)
+- View: admin.ejs
+**POST /admin/delete-user/:userId**
+- Description: Delete a user from the database.
+- Access: Private (admin users)
+## Project Structure
+
+```
+Pet-Adoption/
+├── app.js
+├── package.json
+├── .env
+├── public/
+│   ├── css/
+│   │   ├── style.css
+│   │   ├── pet-details.css
+│   │   ├── create-pet.css
+│   │   ├── auth.css
+│   │   ├── contact.css
+│   │   ├── email-sent.css
+│   │   └── admin.css
+│   ├── images/
+│   └── fonts/
+├── routes/
+│   ├── index.js
+│   ├── users.js
+│   ├── pets.js
+│   └── admin.js
+├── controllers/
+│   ├── authController.js
+│   ├── petController.js
+│   ├── adminController.js
+│   └── contactController.js
+├── models/
+│   ├── User.js
+│   └── Pet.js
+└── views/
+    ├── index.ejs
+    ├── login.ejs
+    ├── signup.ejs
+    ├── pet-details.ejs
+    ├── create-pet.ejs
+    ├── edit-pet.ejs
+    ├── contact.ejs
+    ├── email-sent.ejs
+    └── admin.ejs
+```## Key Files and Directories
+- app.js: The main application file where the Express app is configured.
+- routes/: Contains all route handlers for different parts of the application.
+- controllers/: Contains controller functions that handle the logic for each route.
+- models/: Mongoose schemas and models for MongoDB collections.
+- views/: EJS templates for rendering HTML pages.
+- public/: Static assets like CSS, images, and fonts.
+## License
 ## Authors
 
 - [Alan Sanchez](https://www.github.com/derpnerdd)
 - [Daniel Freeman](https://www.github.com/DanielFreeman068)
 
+
+## Models
+## Security Considerations
+## Known Issues and TODOs
+## Changelog
+## Credits
