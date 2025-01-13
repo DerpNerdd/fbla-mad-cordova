@@ -73,3 +73,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateButtonSelection();
   fetchTestScores("math"); 
 });
+
+window.handleLevelClick = handleLevelClick;

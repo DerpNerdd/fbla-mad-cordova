@@ -303,13 +303,6 @@ if (button) {
     }
 }
 
-    function endGame() {
-    document.getElementById('questionScreen').style.display = 'none';
-    document.getElementById('gameBoard').style.display = 'none';
-    document.getElementById('gameOver').style.display = 'block';
-    document.getElementById('finalScore').textContent = score;
-    }
-
     function recordJeopardyScoreOnServer(finalScore) {
         const token = localStorage.getItem("authToken");
         if (!token) {

@@ -151,6 +151,7 @@ function startGame() {
     timer = setInterval(updateTimer, 100);
     askQuestion();
 }
+window.startGame = startGame;
 
 function updateTimer() {
     timeLeft = Math.max(0, timeLeft - 0.1);
