@@ -1,4 +1,4 @@
-require('dotenv').config();
+import config from './config.js';
 
 const questionPool = {
     math: [
@@ -232,7 +232,7 @@ function recordTestScoreOnServer(subject, date, score) {
       return;
     }
   
-    fetch(`http://${process.env.IP}:3000/tests/score`, {
+    fetch(`http://${config.IP}:3000/tests/score`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

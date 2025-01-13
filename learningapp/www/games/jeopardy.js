@@ -1,4 +1,4 @@
-require('dotenv').config();
+import config from '../js/config.js';
 
 const questionPool = {
     Math: {
@@ -175,7 +175,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // decode user ID from token
     if (!userId) return;
   
-    fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
+    fetch(`http://${config.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -319,7 +319,7 @@ if (button) {
       
         console.log("Posting finalScore =>", finalScore, typeof finalScore);
 
-        fetch(`http://${process.env.IP}:3000/jeopardy/score`, {
+        fetch(`http://${config.IP}:3000/jeopardy/score`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

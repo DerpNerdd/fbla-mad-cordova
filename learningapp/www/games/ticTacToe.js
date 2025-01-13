@@ -1,4 +1,4 @@
-require('dotenv').config();
+import config from '../js/config.js';
 
 
 const QUESTIONS = [
@@ -109,7 +109,7 @@ function updateXP(amount) {
     const userId = getUserIdFromToken(); // your user decode
     if (!userId) return;
   
-    fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
+    fetch(`http://${config.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -360,7 +360,7 @@ class TicTacToeGame {
           return;
         }
 
-        fetch(`http://${process.env.IP}:3000/tictactoe/win`, {
+        fetch(`http://${config.IP}:3000/tictactoe/win`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 // home.js
-require('dotenv').config();
+import config from './config.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Example fetch user data
   async function fetchUserData(userId) {
     const token = localStorage.getItem("authToken");
-    const res = await fetch(`http://${process.env.IP}:3000/users/${userId}`, {
+    const res = await fetch(`http://${config.IP}:3000/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
   
-    const res = await fetch(`http://${process.env.IP}:3000/users/${userId}/xp`, {
+    const res = await fetch(`http://${config.IP}:3000/users/${userId}/xp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

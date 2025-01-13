@@ -1,5 +1,5 @@
 let selectedSubject = "math";
-require('dotenv').config();
+import config from './config.js';
 
 
 // 1) When the user clicks a subject button
@@ -19,7 +19,7 @@ async function fetchTestScores(subject) {
   }
 
   try {
-    const res = await fetch(`http://${process.env.IP}:3000/tests?subject=${subject}`, {
+    const res = await fetch(`http://${config.IP}:3000/tests?subject=${subject}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) {

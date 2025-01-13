@@ -1,4 +1,4 @@
-require('dotenv').config();
+import config from './config.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Script loaded successfully");
@@ -49,7 +49,7 @@ window.auth = async function () {
     password = document.getElementById("login-password").value;
 
     try {
-      const response = await fetch(`http://${process.env.IP}:3000/auth/login`, {
+      const response = await fetch(`http://${config.IP}:3000/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -90,7 +90,7 @@ window.auth = async function () {
     const nameInput = document.querySelector('.signup-box input[type="text"]').value;
 
     try {
-      const response = await fetch(`http://${process.env.IP}:3000/auth/signup`, {
+      const response = await fetch(`http://${config.IP}:3000/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

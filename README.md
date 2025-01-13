@@ -72,27 +72,26 @@ interactive design, and user feedback mechanisms.
 
 - **Frontend:**
   - HTML5, CSS3, JavaScript
-  - EJS (Embedded JavaScript Templates)
   - Responsive design with media queries
 
 - **Backend:**
   - Node.js
   - Express.js
+  - Cordova Android
   - MongoDB with Mongoose ORM
 
 - **Authentication:**
-  - Passport.js for user authentication
+  - JsonWebToken for user authentication
   - bcrypt for password hashing
 
 - **File Uploads:**
-  - Multer for handling multipart/form-data
-
-- **Email Communication:**
-  - Nodemailer for sending emails to pet owners
+  - Cloudinary Media Storage for anytime pulls
 
 - **Icons and Fonts:**
   - Google Fonts for typography
   - Ionicons for icons
+  - Logo created by Daniel
+
 ## Installation and setup
 
 ### **Prerequisites**
@@ -100,19 +99,26 @@ interactive design, and user feedback mechanisms.
 - Node.js (v12 or higher)
 - npm (Node Package Manager)
 - MongoDB (local instance or MongoDB Atlas)
+- Java JDK
+- Android SDK: installed
+- Gradle: installed
 
 ### **Clone the Repository**
 
 ```bash
-git clone https://github.com/Derpnerdd/Pet-Adoption.git
-cd Pet-Adoption
+git clone https://github.com/DerpNerdd/fbla-mad-cordova.git
+cd fbla-mad-cordova
 ```
 ### **Install Dependencies**
 ```bash
 npm install
+install dependecies in /learningApp/ /learningApp/backend/
+npm i -g cordova
+cordova add platform android
 ```
 ### **Environment Variables**
 Create a .env file in the root directory.
+For specific environment variables, email sanchez1.alan1@gmail.com
 
 ## Running the project
 
@@ -120,125 +126,165 @@ Start the Server
 ```
 npm run start
 ```
-The server will start on http://localhost:3000 or the port specified in your .env file.
+The server will start on http://localhost:3000 or the port/ip specified in your .env/config.js file.
 ## Routes and API Endpoints
-**GET /login**
-- Description: Render the login page.
-- Access: Public
-- View: login.ejs
-**POST /api/v1/users/login**
-- Description: Authenticate user and start a session.
-- Access: Public
-- Data: email, password
-**GET /signup**
-- Description: Render the signup (registration) page.
-- Access: Public
-- View: signup.ejs
-**POST /api/v1/users/register**
+
+### Authentication Routes
+**POST /auth/signup**
 - Description: Register a new user.
 - Access: Public
-- Data: username, email, password
-**GET /logout**
-- Description: Log out the current user and destroy the session.
+- Data: `name`, `email`, `password`
+
+**POST /auth/login**
+- Description: Authenticate user and start a session.
+- Access: Public
+- Data: `email`, `password`
+
+### User Routes
+**GET /users/:id**
+- Description: Fetch user data (accessible only by the user).
 - Access: Private (authenticated users)
-## Pet Routes
+- Data: `Authorization` header with a valid JWT.
+
+**POST /users/:id/xp**
+- Description: Update user's XP and level up if necessary.
+- Access: Private (authenticated users)
+- Data: `xpChange`
+
+**POST /users/:id/uploadProfile**
+- Description: Upload a profile picture to Cloudinary and update the user's profile picture URL.
+- Access: Private (authenticated users)
+- Data: `base64Image`
+
+**POST /users/:id/uploadBanner**
+- Description: Upload a banner image to Cloudinary and update the user's banner picture URL.
+- Access: Private (authenticated users)
+- Data: `base64Image`
+
+### Game Routes
+#### Tic Tac Toe
+**POST /tictactoe/win**
+- Description: Increment the user's tic-tac-toe wins and award coins.
+- Access: Private (authenticated users)
+
+#### Jeopardy
+**POST /jeopardy/score**
+- Description: Update the user's highest Jeopardy score and award coins.
+- Access: Private (authenticated users)
+- Data: `finalScore`
+
+#### Timer Challenge
+**POST /timerChallenge/time**
+- Description: Update the user's best timer challenge time and award coins.
+- Access: Private (authenticated users)
+- Data: `finalTime`
+
+### Test Routes
+**POST /tests/score**
+- Description: Add a test score to the user's record.
+- Access: Private (authenticated users)
+- Data: `subject`, `date`, `score`
+
+**GET /tests**
+- Description: Retrieve the user's test scores, optionally filtered by subject.
+- Access: Private (authenticated users)
+- Query Parameters: `subject` (optional)
+
+### Miscellaneous
 **GET /**
-- Description: Display all available pets for adoption.
+- Description: Root route for testing server functionality.
 - Access: Public
-- View: index.ejs
-**GET /pets/new**
-- Description: Render the form to create a new pet listing.
-- Access: Private (authenticated users)
-- View: create-pet.ejs
-**POST /pets**
-- Description: Create a new pet listing.
-- Access: Private (authenticated users)
-- Data: Pet details and images.
-**GET /pets/:id**
-- Description: Display detailed information about a specific pet.
-- Access: Public
-- View: pet-details.ejs
-**GET /pets/edit/:id**
-- Description: Render the form to edit a pet listing.
-- Access: Private (pet owner only)
-- View: edit-pet.ejs
-**POST /pets/edit/:id**
-- Description: Update the pet listing with new information.
-- Access: Private (pet owner only)
-- Data: Updated pet details and images.
-**POST /pets/delete/:id**
-- Description: Delete a pet listing.
-- Access: Private (pet owner or admin)
-## Contact Routes
-**GET /contact/:petId**
-- Description: Render the contact form to message the pet owner.
-- Access: Private (authenticated users)
-- View: contact.ejs
-**POST /contact/:petId**
-- Description: Send a message to the pet owner via email.
-- Access: Private (authenticated users)
-- Data: subject, message
-- Redirects to: email-sent.ejs confirmation page.
-## Admin Routes
-**GET /admin**
-- Description: Render the admin dashboard.
-- Access: Private (admin users)
-- View: admin.ejs
-**POST /admin/delete-user/:userId**
-- Description: Delete a user from the database.
-- Access: Private (admin users)
+
 ## Project Structure
 
 ```
-Pet-Adoption/
-├── app.js
-├── package.json
-├── .env
-├── public/
-│   ├── css/
-│   │   ├── style.css
-│   │   ├── pet-details.css
-│   │   ├── create-pet.css
-│   │   ├── auth.css
-│   │   ├── contact.css
-│   │   ├── email-sent.css
-│   │   └── admin.css
-│   ├── images/
-│   └── fonts/
-├── routes/
-│   ├── index.js
-│   ├── users.js
-│   ├── pets.js
-│   └── admin.js
-├── controllers/
-│   ├── authController.js
-│   ├── petController.js
-│   ├── adminController.js
-│   └── contactController.js
-├── models/
-│   ├── User.js
-│   └── Pet.js
-└── views/
-    ├── index.ejs
-    ├── login.ejs
-    ├── signup.ejs
-    ├── pet-details.ejs
-    ├── create-pet.ejs
-    ├── edit-pet.ejs
-    ├── contact.ejs
-    ├── email-sent.ejs
-    └── admin.ejs
+fbla-mad-cordova/
+├── learningApp/
+│   ├── backend/
+│   │   ├── models/
+│   │   |   ├── User.js
+│   │   ├── node_modules/
+│   │   ├── routes/
+│   │   |   ├── auth.js
+│   │   |   ├── jeopardy.js
+│   │   |   ├── test.js
+│   │   |   ├── ticTacToe.js
+│   │   |   ├── timerChallenge.js
+│   │   |   ├── user.js
+│   │   ├── utils/
+│   │   |   ├── CloudinaryConfig.js
+│   │   ├── .env
+│   │   ├── app.js
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   ├── node_modules/
+│   ├── resources/
+│   │   ├── android/...
+│   │   ├── icon.png
+│   ├── platforms/
+│   │   ├── android/...
+│   ├── www/
+│   │   ├── css/
+│   │   |   ├── categories.css
+│   │   |   ├── games.css
+│   │   |   ├── homeStyle.css
+│   │   |   ├── profile.css
+│   │   |   ├── shopStyle.css
+│   │   |   ├── style.css
+│   │   |   ├── test.css
+│   │   |   ├── testPage.css
+│   │   |   ├── testScores.css
+│   │   ├── Fonts/
+│   │   |   ├── Atop-R99O3.ttf
+│   │   ├── games/
+│   │   |   ├── jeopardy.html
+│   │   |   ├── jeopardy.js
+│   │   |   ├── jeopardy.css
+│   │   |   ├── ticTacToe.html
+│   │   |   ├── ticTacToe.js
+│   │   |   ├── ticTacToe.css
+│   │   |   ├── timer.html
+│   │   |   ├── timer.js
+│   │   |   ├── timer.css
+│   │   ├── images/
+│   │   |   ├── dusk-background.svg
+│   │   |   ├── FBLA-MAD.png
+│   │   |   ├── landscapemad.webp
+│   │   |   ├── spectrum-gradient.png
+│   │   ├── js/
+│   │   |   ├── categories.js
+│   │   |   ├── config.js
+│   │   |   ├── home.js
+│   │   |   ├── profile.js
+│   │   |   ├── script.js
+│   │   |   ├── testScores.js
+│   │   ├── categories.html
+│   │   ├── games.html
+│   │   ├── homepage.html
+│   │   ├── index.html
+│   │   ├── profile.html
+│   │   ├── shop.html
+│   │   ├── test.html
+│   │   ├── testPage.html
+│   │   └── testScores.html
+│   ├── .gitignore
+│   ├── .config.xml
+│   ├── package-lock.json
+│   └── package.json
+├── .gitattributes
+├── .gitignore
+├── .gitmodules
+├── LICENSE
+└── README.md
 ```
 ## Key Files and Directories
 - app.js: The main application file where the Express app is configured.
-- routes/: Contains all route handlers for different par0ts of the application.
-- controllers/: Contains controller functions that handle the logic for each route.
+- routes/: Contains all route handlers for different parts of the application.
 - models/: Mongoose schemas and models for MongoDB collections.
-- views/: EJS templates for rendering HTML pages.
-- public/: Static assets like CSS, images, and fonts.
+- www/: Static assets like CSS, images, and fonts.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the GPL-3.0 License.
 
 ## Authors
 For any inquiries or support, please contact:
@@ -251,28 +297,44 @@ For any inquiries or support, please contact:
 **User Model (User.js)**
 Fields:
 
-- username (String)
-- email (String, unique)
-- password (String, hashed)
-- isAdmin (Boolean, default: false)
+- name (String)
+- email (String, unique, required)
+- password (String, hashed, required)
+- xp (Number, default: 0)
+- level (Number, default: 0)
+- profilePicture (String, default: cloudinaryLink)
+- bannerPicture (String, default: cloudinaryLink)
+- jeopardyScore (Number, default: 0)
+- ticTacToeWins (Number, default: 0)
+- coins (Number, default: 0)
+- timerChallengeTime (Number, default: 0)
+- testScores:
+  - subject (String, required)
+  - date (Date, required)
+  - score (Number, required)
+
+
 ## Security Considerations
 - Password Security: User passwords are hashed using bcrypt before storing in the database.
-Authentication: Sessions are managed securely using Express sessions and Passport.js.
+Authentication: Sessions are managed securely using Express sessions and with Token Authentication
 - Input Validation: All user inputs should be validated and sanitized to prevent injection attacks.
 - Access Control: Middleware functions ensure that only authorized users can access certain routes.
+
 ## Known Issues and TODOs
-- Image Uploads: Currently supports JPEG, PNG, and WebP formats. Consider adding validation for file size and type.
-- Email Service: Configure nodemailer with a reliable email service. Handle errors gracefully.
-- Testing: Implement unit and integration tests for critical components.
+- Testing: Implement unit and integration tests with iOS devices to make sure it works accross all platforms
 - Error Handling: Improve error handling and provide user-friendly error messages.
+- Shop: Implement the shop into the app to allow users to express themselves differently than others
+- Avatars: Implement avatars you can create with items bought from the shop
+
 ## Changelog
 v1.0.0
 - Initial release with core functionalities:
 - User authentication
-- Pet listing management
-- Contact pet owners
-- Admin dashboard
-## Credits
-This project was developed with the aim of facilitating pet adoption and helping pets find loving homes.
+- Gameified Learning
+- Profile integration and customization
+- Basic testing
 
-Thank you for contributing to the Pet Adoption Platform!
+## Credits
+This project was developed by the hard-working developers of Alan Sanchez and Daniel Freeman, with minor design ideas from Noelle Weaver.
+
+Thank you for contributing to the Jolt FBLA-MAD Platform!
