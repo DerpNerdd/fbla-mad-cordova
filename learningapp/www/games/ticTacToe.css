@@ -129,7 +129,8 @@ h1 {
 .message {
     color: var(--accent-color);
     font-size: 1rem;
-    margin: 0.75rem 0;
+    margin: 0.75rem 0 0; /* Keep bottom margin same, increase top margin */
+    margin-top: 4.25rem; /* This explicitly adds space at the top */
     min-height: 1.5rem;
     padding: 0.5rem;
 }
@@ -148,7 +149,8 @@ h1 {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto;
+    margin: 10% auto; /* Retain the shorthand for left/right and bottom */
+    margin-top: 55%; /* Add extra space on top */
     padding: 1rem;
     border: 1px solid #888;
     width: 90%;
